@@ -1,15 +1,16 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useContext, useRef, useState } from 'react'
 import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { UserDropdownItem, MenuItem } from '~/types'
-
+import UserProfile from './UserProfile'
 export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [isNavOpen, setIsNavOpen] = useState(false)
   const navRef = useRef(null)
   const router = useRouter()
+  const userDropdownRef = useRef(null)
 
   const menuItems: MenuItem[] = [
     {
@@ -35,31 +36,6 @@ export default function Navbar() {
     },
   ]
 
-  const profileDropdownItems: UserDropdownItem[] = [
-    {
-      id: 1,
-      title: 'Profile',
-      href: '/profile',
-      icon: 'user',
-    },
-    { id: 2, title: 'Settings', href: '/settings', icon: 'settings' },
-    {
-      id: 3,
-      title: 'Logout',
-      href: '/logout',
-      icon: 'logout',
-    },
-  ]
-
-  const handleProfileDropDown = () => {
-    setIsProfileOpen((isProfileOpen) => {
-      if (isNavOpen) {
-        setIsNavOpen(false)
-      }
-
-      return !isProfileOpen
-    })
-  }
   const handleMobileMenu = () => {
     setIsNavOpen((currentNavState) => {
       if (isProfileOpen) {
@@ -69,18 +45,19 @@ export default function Navbar() {
     })
   }
 
-  useEffect(() => {
-    const handleOutsideClick = (e: any) => {
-      if (navRef.current && !navRef.current.contains(e.target)) {
-        setIsNavOpen(false)
-        setIsProfileOpen(false)
-      }
+  const handleOutsideClick = (e: any) => {
+    if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
+      console.log('clicked outside')
+      setIsProfileOpen(false)
     }
+  }
+
+  useEffect(() => {
     document.addEventListener('click', handleOutsideClick)
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [isNavOpen, isProfileOpen])
+  }, [])
 
   return (
     <nav
@@ -91,53 +68,27 @@ export default function Navbar() {
         <Link href="/">
           <a className="flex items-center">
             <Image src="/images/money_flat_icon.svg" alt="logo" width={80} height={80} className="mr-2" />
-            <span className="text-2xl font-bold text-green-700 dark:text-gray-200">Hand of Midas</span>
+            <span className="text-2xl font-bold text-gray-700 dark:text-gray-200">Midas</span>
           </a>
         </Link>
 
-        <div className="relative flex items-center justify-center w-40 md:order-2">
+        <div className="relative flex items-center justify-center w-40 md:order-2" ref={userDropdownRef}>
           <button
             type="button"
             className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
             id="user-menu-button"
             aria-expanded="false"
             data-dropdown-toggle="dropdown"
-            onClick={handleProfileDropDown}
+            onClick={() => {
+              setIsNavOpen(false)
+              setIsProfileOpen(!isProfileOpen)
+            }}
           >
             <span className="sr-only">Open user menu</span>
             <img className="w-8 h-8 rounded-full" src="/images/user_anonymous_female_avatar.png" alt="user photo" />
           </button>
 
-          <div
-            className={clsx(
-              'absolute w-full top-4 z-50 my-4 text-base list-none',
-              'transition-all duration-300 ease-in-out -z-10 transform origin-top-right',
-              'bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600',
-              isProfileOpen
-                ? 'block opacity-100 pointer-events-auto translate-y-0 z-10'
-                : 'hidden opacity-0 pointer-events-none -translate-y-full'
-            )}
-            id="dropdown"
-            data-popper-placement="bottom-start"
-          >
-            <div className="px-4 py-3 ">
-              <span className="block text-sm text-gray-900 dark:text-white">Bonnie gray</span>
-              <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">
-                name@afsdfasdfasdfs
-              </span>
-            </div>
-            <ul className="py-1" aria-labelledby="dropdown">
-              {profileDropdownItems.map((item) => (
-                <li key={item.id}>
-                  <Link href={item.href}>
-                    <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
-                      {item.title}
-                    </a>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <UserProfile isProfileOpen={isProfileOpen} />
           <button
             data-collapse-toggle="mobile-menu-2"
             type="button"
@@ -173,13 +124,13 @@ export default function Navbar() {
           )}
           id="mobile-menu-2"
         >
-          <ul className="flex flex-col mt-4 bg-white md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+          <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
             {menuItems.map((item) => (
               <li key={item.id}>
                 <Link href={item.href}>
                   <a
                     className={clsx(
-                      'block relative px-4 py-2 text-sm dark:bg-gray-900 md:dark:bg-transparent md:dark:hover:bg-transparent md:hover:bg-transparent hover:bg-gray-200  dark:hover:bg-gray-600  ',
+                      'block relative px-4 py-2 text-sm  md:dark:bg-transparent md:dark:hover:bg-transparent md:hover:bg-transparent dark:text-gray-50 hover:bg-gray-200  dark:hover:bg-gray-600  ',
                       // item.isActive ? 'underline decoration-sky-500 decoration-2' : '',
                       'border-gray-200 border-b md:border-transparent decoration-0',
                       'menu-item',

@@ -3,11 +3,12 @@ import { useState } from 'react'
 import clsx from 'clsx'
 import Image from 'next/image'
 import Layout from '~/components/Layout'
+import Connecting from '~/components/Loading/Loading'
 
 const Home: NextPage = () => {
   return (
-    <Layout>
-      <div className="container text-gray-800 dark:text-stone-50 dark:text-gray-100">About</div>
+    <Layout title="About">
+       <div className="text-gray-800 dark:text-stone-50 dark:text-gray-100"><Connecting /></div>
     </Layout>
   )
 }

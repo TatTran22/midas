@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["clsx", "flowbite", "themesberg"]
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "cSpell.words": ["clsx", "flowbite", "themesberg", "supabase", "zxcvbn"]
 }
