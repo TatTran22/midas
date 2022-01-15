@@ -7,7 +7,7 @@ import Layout from '~/components/Layout'
 const Home: NextPage = () => {
   return (
     <Layout>
-      <div className="text-gray-800  dark:text-stone-50 dark:text-gray-100">Homepage</div>
+      <div className="container text-gray-800 dark:text-stone-50 dark:text-gray-100">About</div>
     </Layout>
   )
 }
