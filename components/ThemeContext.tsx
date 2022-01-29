@@ -6,7 +6,7 @@ export const ThemeContext = createContext<{ darkMode: boolean; toggleDarkMode: (
   toggleDarkMode: () => {},
 })
 
-export const ThemeContextProvider = (props: any) => {
+export const ThemeContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
@@ -18,9 +18,9 @@ export const ThemeContextProvider = (props: any) => {
     setDarkMode(!darkMode)
   }
 
-  const value = {
-    darkMode,
-    toggleDarkMode,
-  }
-  return <ThemeContext.Provider value={value} {...props} />
+  return (
+    <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
+      {children}
+    </ThemeContext.Provider>
+  )
 }

@@ -8,9 +8,13 @@ import Connecting from '~/components/Loading/Loading'
 const Home: NextPage = () => {
   return (
     <Layout title="About">
-       <div className="text-gray-800 dark:text-stone-50 dark:text-gray-100"><Connecting /></div>
+       <div className="text-gray-800 dark:text-stone-50 "><Connecting />
+       
+         
+       </div>
     </Layout>
   )
 }
 
 export default Home
+   

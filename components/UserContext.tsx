@@ -21,7 +21,7 @@ export const UserContextProvider = (props: any) => {
       setSession(session)
       setUser(session?.user ?? null)
     })
-
+    console.log(`Supabase auth listener: ${authListener}`)
     return () => {
       authListener?.unsubscribe()
     }
